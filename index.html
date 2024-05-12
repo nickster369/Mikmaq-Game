@@ -1,0 +1,192 @@
+<!--
+    Main HTML file for the structure of the Mi'kmaq app.
+
+    Author: Nicolas Sabbagha- Initializing structuring of all the html elements
+            Raish Raj Joshi- Documentation of the file, add and remove classes/ ids
+            Swaraj Shrestha- Fixing grid, edits to the first row contents, and onloading of page
+            Suyog Chitrakar - Modified body's onload
+-->
+<!DOCTYPE html>
+<!--Specifies the language of the element's content-->
+<html lang="en">
+  <head>
+    <!-- Sets what appears in the window tab -->
+    <title>Mikmaq game</title>
+    <!--For the browser to display the page correctly the character encoding must be made known
+        to the browser. Each character has a unique value or code as mapped in UTF-8 -->
+    <meta charset="UTF-8" />
+    <!--The X-UA-Compatible meta tag allows web authors to choose what version of Internet Explorer the 
+        page should be rendered as. 
+        Currently in use: "IE=edge"
+    -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <!-- Sets width to the width of the device at scale 1:1 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Make Bootstrap styles accessible to this file  -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+    <!-- Make these styles available to this file -->
+    <link rel="stylesheet" href="/Styles.css" />
+    <!-- Make the jQuery library available to this file -->
+    <script src="./scripts/jquery-3.6.0.js"></script>
+    <!-- make the JavaScript file available to this file -->
+    <script src="./scripts/main.js"></script>
+  </head>
+
+  <body onload="get()">
+
+    <!-- First Row: Volume image/ random word /"si'owa'si?"-->
+    <div class="row firstRow">
+      <div class="col"></div>
+      <div class="col"></div>
+      <div id="newWord" class="col"></div>
+      <div class="col"></div>
+      <div id="scoreText" class="col"></div>
+      <div class="col"></div>
+      <div class="col"></div>
+    </div>
+
+    <!--This section contains all the images, success text and error text included in the game-->
+    <div class="container">
+      <!-- Second Row: Star and Sun image/ (wiktm, teluisi, nin) images-->
+      <div class="row">
+        <div class="col">
+          <img
+            id="star"
+            class="displayOnCorrect"
+            src="./images/star.jpg"
+            alt="star"
+            draggable="false"
+            hidden
+          />
+        </div>
+        <div class="col-1"></div>
+        <div class="col" ondrop="drop(event)" ondragover="allowDrop(event)">
+          <img
+            id="wiktm"
+            src="./images/wiktm.jpg"
+            alt="wiktm"
+            draggable="false"
+          />
+        </div>
+        <div class="col" ondrop="drop(event)" ondragover="allowDrop(event)">
+          <img
+            id="teluisi"
+            src="./images/teluisi.jpg"
+            alt="teluisi"
+            draggable="false"
+          />
+        </div>
+        <div class="col" ondrop="drop(event)" ondragover="allowDrop(event)">
+          <img id="nin" src="./images/nin.jpg" alt="nin" draggable="false" />
+        </div>
+        <div class="col-1"></div>
+        <div class="col">
+          <img
+            id="sun"
+            class="displayOnIncorrect"
+            src="./images/sun.jpg"
+            alt="sun"
+            draggable="false"
+            hidden
+          />
+        </div>
+      </div>
+
+      <!-- Third Row: Bear image/ (mijisi, ltu, kil) images/ Texts for correct and incorrect answer-->
+      <div class="row">
+        <div class="col">
+          <img
+            id="bearImage"
+            src="./images/bear.jpg"
+            alt="bear"
+            ondragstart="drag(event)"
+          />
+          <img
+            id="successText"
+            class="displayOnCorrect"
+            src="./images/successText.jpg"
+            alt="successText"
+            draggable="false"
+            hidden
+          />
+        </div>
+        <div class="col-1"></div>
+        <div class="col" ondrop="drop(event)" ondragover="allowDrop(event)">
+          <img
+            id="mijisi"
+            src="./images/mijisi.jpg"
+            alt="mijisi"
+            draggable="false"
+          />
+        </div>
+        <div class="col" ondrop="drop(event)" ondragover="allowDrop(event)">
+          <img id="ltu" src="./images/ltu.jpg" alt="ltu" draggable="false" />
+        </div>
+        <div class="col" ondrop="drop(event)" ondragover="allowDrop(event)">
+          <img id="kil" src="./images/kil.jpg" alt="kil" draggable="false" />
+        </div>
+        <div class="col-1"></div>
+        <div class="col">
+          <img
+            id="oopsText"
+            class="displayOnIncorrect"
+            src="./images/oopsText.jpg"
+            alt="oopsText"
+            draggable="false"
+            hidden
+          />
+        </div>
+      </div>
+
+      <!-- Fourth Row: Star and Sun images/ (kesalk, eliey, aqq) images-->
+      <div class="row">
+        <div class="col">
+          <img
+            id="star"
+            class="displayOnCorrect"
+            src="./images/star.jpg"
+            alt="star"
+            draggable="false"
+            hidden
+          />
+        </div>
+        <div class="col-1"></div>
+        <div class="col" ondrop="drop(event)" ondragover="allowDrop(event)">
+          <img
+            id="kesalk"
+            src="./images/kesalk.jpg"
+            alt="kesalk"
+            draggable="false"
+          />
+        </div>
+        <div class="col" ondrop="drop(event)" ondragover="allowDrop(event)">
+          <img
+            id="eliey"
+            src="./images/eliey.jpg"
+            alt="eliey"
+            draggable="false"
+          />
+        </div>
+        <div class="col" ondrop="drop(event)" ondragover="allowDrop(event)">
+          <img id="aqq" src="./images/aqq.jpg" alt="aqq" draggable="false" />
+        </div>
+        <div class="col-1"></div>
+        <div class="col">
+          <img
+            id="sun"
+            class="displayOnIncorrect"
+            src="./images/sun.jpg"
+            alt="sun"
+            draggable="false"
+            hidden
+          />
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
