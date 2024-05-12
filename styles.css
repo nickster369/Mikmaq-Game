@@ -1,0 +1,97 @@
+/*
+  This file is used to provide styling for the program. The font family, font sizes, image sizes, and 
+  changes to specific id's/ classes are made in this file.
+  
+  Author: Nicolas Sabbagha - Established all elements that needed styling and put in initial values and adjusted as needed.
+          Tania Terence - Made changes to the values as needed.
+          Raish Raj Joshi - Made changes so the proportions based on computers in LA278 and siowasi button-click error.
+          
+*/
+
+/***************** HTML tag based styles *****************/
+body {
+  background-color: rgb(240, 231, 140);
+  /*Disables scrolling*/
+  overflow: hidden;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+img {
+  width: 100%;
+  height: 100%;
+}
+
+/***************** User defined id based styles *****************/
+#volume {
+  height: 100%;
+  width: 44.3999%;
+  margin-left: 1em;
+}
+
+#textImage,
+#addText {
+  height: 105%;
+  width: 50%;
+}
+
+#textScore {
+  background-color: #f0e78c;
+  border: none;
+  font-weight: 700;
+  font-size: 290%;
+  margin-left: -5.8em;
+}
+
+/***************** User defined class based styles *****************/
+.col {
+  padding: 0%;
+}
+
+.siowasiButton {
+  height: 80%;
+  width: 15%;
+  background-color: #f0e78c;
+  border: none;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  margin-left: 7.4em;
+  margin-right: 3.2em;
+  cursor: pointer;
+  font-size: 500%;
+  outline: none;
+  font-weight: 690;
+}
+
+.scoreButton {
+  background-color: #f0e78c;
+  border: none;
+  cursor: pointer;
+  outline: none;
+  font-weight: 750;
+  font-size: 480%;
+margin-right: -3.5em;
+}
+
+.scoreButton:hover {
+  color: magenta;
+}
+
+.siowasiButton:focus {
+  outline: none;
+}
+
+.siowasiButton:hover {
+  color: magenta;
+}
+
+.container {
+  max-width: 87%;
+  margin: auto;
+}
+
+/*row containing volume button, word image, and siowasi*/
+.firstRow {
+  margin-left: -4%;
+  margin-right: auto;
+}
