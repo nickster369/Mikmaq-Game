@@ -203,7 +203,7 @@ function showScore() {
 function insertImage(imgFile) {
   $("#newWord").html(
     "<div id='resultModal' class='col'></div>" +
-      "<div id='sampleHide' class='col'><input class= 'btn btn-link' id='volume'  type='image' src='./images/vol.jpg' onclick='getAudio(audioWord)'>" +
+      "<div id='sampleHide' class='col'><input class= 'btn btn-link' id='volume'  type='image' src='./images/vol.jpg' onclick='getAudio(\"" + audioWord + "\")'>" +
       "<img id='textImage' src='" +
       imgFile +
       "' alt='questionText' draggable='false'>" +
@@ -266,16 +266,23 @@ function drag(ev) {
 }
 
 /**
- * The purpose of this function is to suspend the default behaviour so that instead the dragged element 
- * can potentially end up with a new position.
+ * Safely allow the bear to hover over the target images
  *
  * @param {Event} ev - is the event object loaded with "dragover" event info
 */
 function allowDrop(ev) {
   ev.preventDefault();
 
-  document.getElementById(ev.target.id).style.opacity = 0.1;
-  showAll(ev.target.id);
+  // Find the actual image ID whether they drag over the image or the div container
+  let targetId = ev.target.id;
+  if (ev.target.tagName === "DIV" && ev.target.firstElementChild) {
+    targetId = ev.target.firstElementChild.id;
+  }
+
+  if (targetId) {
+    document.getElementById(targetId).style.opacity = 0.1;
+    showAll(targetId);
+  }
 }
 
 /**
@@ -295,28 +302,36 @@ function showAll(hideValue) {
 }
 
 /**
- * The purpose of this function is: to allow a dropped element to acquire a new position; retrieve the
- * id of the dropped element using the key "text"; and to set the new position of the dropped
- * element; respectively. After the bear image is dropped, it will no longer be draggable.
+ * Safely replace the target image with the Bear without crashing the DOM.
  *
  * @param {Event} ev - is the event object loaded with "drop" event info
  */
 function drop(ev) {
-  let dropLocation = ev.target; //location of image where the bear is being dropprd (added by Raish)
   ev.preventDefault();
 
   let beingDragged = ev.dataTransfer.getData("text");
+  let bearElement = document.getElementById(beingDragged);
+  let targetImageId = "";
 
-  ev.target.appendChild(document.getElementById(beingDragged));
+  // Safely swap the bear with the target image
+  if (ev.target.tagName === "IMG") {
+    targetImageId = ev.target.id;
+    ev.target.parentNode.replaceChild(bearElement, ev.target);
+  } else if (ev.target.tagName === "DIV" && ev.target.firstElementChild) {
+    targetImageId = ev.target.firstElementChild.id;
+    ev.target.replaceChild(bearElement, ev.target.firstElementChild);
+  }
 
-  const droppedBear = ev.target.firstChild;
-  dropLocation.parentNode.replaceChild(droppedBear, dropLocation);
+  // Disable dragging once dropped
+  if (bearElement) {
+    bearElement.draggable = false;
+  }
 
-  //doing this disables the user from dragging the bear even after the bear is dropped
-  document.getElementById(beingDragged).draggable = false;
-
-  searchAns(dropLocation.id);
-  post();
+  // Trigger win/loss logic
+  if (targetImageId) {
+    searchAns(targetImageId);
+    post();
+  }
 }
 
 /**
