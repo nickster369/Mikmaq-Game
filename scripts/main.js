@@ -11,8 +11,7 @@
  *         Nicolas Sabbagha- Handeling paremeters with respect to the HTMl file, modify siowasi modal.
 */
 
-//defining the base URL for the server
-const SERVER_URL = "http://ugdev.cs.smu.ca:3056";
+// SERVER_URL removed to allow the game to run natively in the browser for portfolio deployment
 
 //Global variables for the file.
 let imageNo = 0; //stores the image number of correct answer
@@ -57,27 +56,22 @@ const words = [
 ];
 
 /**
- * The purpose of this function is to GET a JSON object from the
- * server at the relative endpoint /myGet.
- *
- * Author: Terry Goldsmith - Wrote initial function
- *         Suyog Chitrakar - Adapted function for the project
+ * The purpose of this function is to GET a JSON object.
+ * Updated for portfolio to use sessionStorage instead of a live backend.
  */
 function get() {
-  // attempt to GET a JSON object from endpoint http://ugdev.cs.smu.ca:3056/myGet
-  // if (the middleware for this endpoint ran without error)
-  //   call getSuccessFn
-  // else
-  //   call errorFn
-  $.get(SERVER_URL + "/myGet", getSuccessFn).fail(errorFn);
+  // Retrieve saved scores from session storage, defaulting to 0 if none exist
+  let returnedData = {
+    cAnswer: parseInt(sessionStorage.getItem("correctAnswer")) || 0,
+    inAnswer: parseInt(sessionStorage.getItem("incorrectAnswer")) || 0
+  };
+  
+  getSuccessFn(returnedData);
 }
 
 /**
  * This function is used to check whether the answer is correct or not and display the success text or
  * incorrect text accordingly.
- *
- * Author: Swaraj Shrestha- Wrote initial function
- *         Raish Raj Joshi- funcition displayStarOrSun() with parameters, increments
  */
 function correctResponse() {
   if (referenceNo == imageNo) {
@@ -90,47 +84,32 @@ function correctResponse() {
 }
 
 /**
- * The purpose of this function is to POST a JSON object to the
- * server at the relative endpoint /myPost.
- *
- * Adapted from @Terry_Goldsmith's code for Lab10.
- *
- * Author: Suyog Chitrakar - Wrote initial function
- *         Raish Raj Joshi - Updated objects
+ * The purpose of this function is to POST a JSON object.
+ * Updated for portfolio to save directly to the browser's sessionStorage.
  */
 function post() {
-  // define the object to be posted
-  const objects = { cAnswer: correctAnswer, inAnswer: incorrectAnswer };
+  // Save the updated scores to session storage
+  sessionStorage.setItem("correctAnswer", correctAnswer);
+  sessionStorage.setItem("incorrectAnswer", incorrectAnswer);
 
-  // attempt to POST obj to endpoint http://ugdev.cs.smu.ca:3056/myPost
-  // if (the middleware for this endpoint ran without error)
-  //   call postSuccessFn
-  // else
-  //   call errorFn
-  $.post(SERVER_URL + "/myPost", objects, postSuccessFn).fail(errorFn);
+  const objects = { cAnswer: correctAnswer, inAnswer: incorrectAnswer };
+  postSuccessFn(objects);
 }
 
 /**
- * The purpose of this function is to log the JSON object received
- * from the server.
+ * The purpose of this function is to log the JSON object.
  *
- * Adapted from @Terry_Goldsmith's code for Lab10.
- *
- * Author: Suyog Chitrakar - Wrote initial function
- *
- * @param {object} returnedData contains the JSON object returned by the server
+ * @param {object} returnedData contains the JSON object
  */
 function postSuccessFn(returnedData) {
-  console.log(returnedData);
+  console.log("Score saved successfully:", returnedData);
 }
 
 /**
- * The purpose of this function is to log the JSON object received
- * from the server.
+ * The purpose of this function is to process the data received
+ * and display the score.
  *
- * Author: Raish Raj Joshi- Wrote initial function
- *
- * @param {object} returnedData contains the JSON object returned by the server
+ * @param {object} returnedData contains the JSON object returned
  */
 function getSuccessFn(returnedData) {
   correctAnswer = returnedData.cAnswer;
@@ -140,27 +119,21 @@ function getSuccessFn(returnedData) {
   totalAnswer = parseInt(correctAnswer) + parseInt(incorrectAnswer);
 
   showScore();
-  console.log(returnedData);
+  console.log("Score loaded:", returnedData);
 }
+
 /**
  * This function takes a single parameter, err, which is an error object, and logs the error
  * responseText to the console.
  *
- * Adapted from @Terry_Goldsmith's code for Lab10.
- *
- * Author: Suyog Chitrakar - Wrote initial function
- *
  * @param {object} err the error object returned by the server
  */
 function errorFn(err) {
-  console.log(err.responseText);
+  console.log(err);
 }
 
 /**
  * Gets a random number from 0- total number of words (i.e. 9)
- *
- * Brought from: mikmaqGame.js by Sarah Derby
- * Author: Swaraj Shrestha- Wrote initial function
  *
  * @returns a random int from 0-numWords
  */
@@ -173,9 +146,6 @@ function getRandomInt() {
  * stored in the variable, i.e currentWord. It is then used to get the audio and picture by adding
  * the file extension. The currentWord should not be the same as the word displayed in the previous
  * question.
- *
- * Author: Swaraj Shrestha- Wrote initial function
- *         Raish Raj Joshi- set draggable for bear
  */
 function getWord() {
   $("#bearImage").attr("draggable", true);
@@ -196,8 +166,6 @@ function getWord() {
 /**
  * This function is used to get the image of the answer.
  *
- * Author: Swaraj Shrestha- Wrote initial function
- *
  * @param {picture} picture - image for given word in the question
  */
 function getWordImage(picture) {
@@ -210,8 +178,6 @@ function getWordImage(picture) {
  * This function is used to get the audio for the word in the question and also play the audio after
  * clicking the volume button.
  *
- * Author: Swaraj Shrestha- Wrote initial function
- *
  * @param {audio} audioWord - audio for correct answer
  */
 function getAudio(audioWord) {
@@ -222,9 +188,6 @@ function getAudio(audioWord) {
 
 /**
  * This function is used to display the score modal at the start of the program.
- *
- * Author: Raish Raj Joshi- Wrote initial function
- *         Suyog Chitrakar- Added getWord() function
  */
 function showScore() {
   getWord();
@@ -234,10 +197,6 @@ function showScore() {
 
 /**
  * The purpose of this function is to insert the images in the program.
- *
- * Author: Swaraj Shrestha- Wrote initial function
- *         Raish Raj Joshi- Added score modal
- *         Nicolas Sabbagha - Updated code
  *
  * @param {picture} imgFile - the word image stored after it is generated randomly
  */
@@ -257,10 +216,6 @@ function insertImage(imgFile) {
  * This function is used to display the modal with clickable score.
  * Initially the score displayed is 0/0.
  * When the user starts answering the questions, the score is updated to 1/1, 1/2, etc.
- *
- * Author: Suyog Chitrakar - Wrote initial function
- *         Raish Raj Joshi - Edited function to display value of variables, disable draggable for bear
- *         Nicolas Sabbagha - Updated code
  */
 function clickScore() {
   $("#bearImage").attr("draggable", false);
@@ -277,9 +232,6 @@ function clickScore() {
 /**
  * This function is used to display the modal with siowasi text after the user has answered the
  * question.
- *
- * Author: Swaraj Shrestha- Wrote initial function
- *         Nicolas Sabbagha- Modified siowasi image to text
  */
 function insertSiowasiModal() {
   document.getElementById("sampleHide").style.display = "none";
@@ -290,8 +242,6 @@ function insertSiowasiModal() {
 
 /**
  * This function is used to display the result modal after the question is answered.
- *
- * Author: Swaraj Shrestha- Wrote initial function
  */
 function show() {
   insertSiowasiModal();
@@ -300,9 +250,6 @@ function show() {
 
 /**
  * This function is used to reload the page to the start page.
- *
- * Author: Swaraj Shrestha- Wrote initial function
- *
 */
 function refreshPage() {
   location.reload();
@@ -311,10 +258,6 @@ function refreshPage() {
 /**
  * The purpose of this function is to store the id of the element being
  * dragged in a common storage area, under the key "text".
- *
- * This function runs as soon as an element has begun to be dragged.
- *
- * Author: Raish Raj Joshi- Wrote the initial function
  *
  * @param {Event} ev - is the event object loaded with "drag" event info
 */
@@ -325,13 +268,6 @@ function drag(ev) {
 /**
  * The purpose of this function is to suspend the default behaviour so that instead the dragged element 
  * can potentially end up with a new position.
- *
- * This function runs when a dragged element is over a potential target.
- *
- * Author: Raish Raj Joshi- Wrote the initial function, Added parameters required and preventDefault()
- *         Suyog Chitrakar- Hiding images on hover
- *         Nicolas Sabbagha - Modified the parameters for the function
- *         Swaraj Shrestha- added the showAll()
  *
  * @param {Event} ev - is the event object loaded with "dragover" event info
 */
@@ -345,8 +281,6 @@ function allowDrop(ev) {
 /**
  * This function is used to hide the images in the grid when the bear image is being dragged over it and
  * show the image when the bear image is no longer hovering over the image.
- *
- * Author: Swaraj Shrestha- Wrote initial function
  *
  * @param {String} hideValue - name of image being hidden
  */
@@ -365,11 +299,7 @@ function showAll(hideValue) {
  * id of the dropped element using the key "text"; and to set the new position of the dropped
  * element; respectively. After the bear image is dropped, it will no longer be draggable.
  *
- * Author: Raish Raj Joshi- Wrote initial function, set draggable to false after drop, post()
- *         Swaraj Shrestha- added the searchAns()
- *         Tania Terence- fixed bear image not appearing when dropped.
- *
- * @param {Event} - is the event object loaded with "drop" event info
+ * @param {Event} ev - is the event object loaded with "drop" event info
  */
 function drop(ev) {
   let dropLocation = ev.target; //location of image where the bear is being dropprd (added by Raish)
@@ -392,8 +322,6 @@ function drop(ev) {
 /**
  * This method is used to assign the correct answer to imageNo.
  *
- * Author: Swaraj Shrestha- Wrote initial function
- *
  * @param {String} targetID - name of the image
  */
 function searchAns(targetID) {
@@ -408,8 +336,6 @@ function searchAns(targetID) {
  * 1 == when answer is correct
  * 2 == when answer is incorect
  *
- * Author: Raish Raj Joshi- Wrote initial function
- *
  * @param {number} ans - value being passed after question is answered
  */
 function displayStarOrSun(ans) {
@@ -417,14 +343,6 @@ function displayStarOrSun(ans) {
     // when the answer is correct
     [].forEach.call(
       document.querySelectorAll(".displayOnCorrect"),
-      /**
-       * This is local function that unhides the content for correct answer; displays stars and
-       * success text.
-       *
-       * Author: Raish Raj Joshi- Wrote the initial function
-       *
-       * parameter: correctResponse- images/ texts to be unhidden
-       */
       function (correctResponse) {
         correctResponse.hidden = false;
       }
@@ -434,14 +352,6 @@ function displayStarOrSun(ans) {
     // when the answer is incorrect
     [].forEach.call(
       document.querySelectorAll(".displayOnIncorrect"),
-      /**
-       * This is a local function that unhides the content for incorrect answer; displays sunflower
-       * and oops text.
-       *
-       * Author Raish Raj Joshi- Wrote the initial function
-       *
-       * parameter: incorrectResponse- images/ texts to be unhidden
-       */
       function (incorrectResponse) {
         incorrectResponse.hidden = false;
       }
